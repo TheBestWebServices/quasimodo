@@ -1,7 +1,7 @@
-'use strict';
+import { task, watch, series } from 'gulp';
 
-const gulp = require('gulp');
-
-gulp.task('watch', () => {
-  gulp.watch(['src/**'], gulp.series('default'))
-});
+export default function() {
+  task('watch', () => {
+    watch(['src/**'], series('default'))
+  });
+}

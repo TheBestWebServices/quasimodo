@@ -1,36 +1,27 @@
 {
-  "manifest_version": 2,
-
+  "manifest_version": 3,
   "name" : "__MSG_ext_name__",
   "description": "__MSG_ext_description__",
   "default_locale" : "en",
-
-  "version": "0.4.7",
-
+  "version": "1.0.0",
   "permissions": [
     "notifications",
+    "offscreen",
     "storage"
   ],
-
-  "browser_action": {
+  "action": {
     "default_title": "__MSG_ext_name__",
     "default_popup": "popup.html"
   },
-
   "options_page": "options.html",
-
   "icons": {
     "16": "img/icon16.png",
     "32": "img/icon32.png",
     "48": "img/icon48.png",
     "128": "img/icon128.png"
   },
-
   "background": {
-    "scripts": [
-      "js/lib.js",
-      "js/background.js"
-    ],
-    "persistent": false
+    "service_worker": "js/background.js",
+    "type": "module"
   }
 }

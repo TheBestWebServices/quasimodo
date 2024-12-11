@@ -1,5 +1,9 @@
-'use strict';
+import cleanTask   from './gulp/tasks/clean.js'
+import copyTask    from './gulp/tasks/copy.js'
+import watchTask   from './gulp/tasks/watch.js'
+import defaultTask from './gulp/tasks/default.js'
 
-const requireDir = require('require-dir');
-
-requireDir('./gulp/tasks', { recurse: true });
+cleanTask();
+copyTask();
+watchTask();
+defaultTask();

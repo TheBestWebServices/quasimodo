@@ -1,6 +1,6 @@
-v0.4.7
+## Quasimodo
 
-Available in [Chrome Web Store](https://chrome.google.com/webstore/detail/quasimodo/jpohldhhhjpclbldblabdhkgnjkicflm?hl=en-US) and [Opera add-ons](https://addons.opera.com/en/extensions/details/quasimodo/)
+Available in [Chrome Web Store](https://chrome.google.com/webstore/detail/quasimodo/jpohldhhhjpclbldblabdhkgnjkicflm?hl=en-US)
 
 ### Make a build
 1. ```npm ci```

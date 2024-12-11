@@ -2,23 +2,16 @@
   "name": "quasimodo",
   "version": "0.4.7",
   "description": "Quasimodo is a simple notifier which reminds you about sitting straight.",
-  "main": "gulpfile.js",
   "scripts": {
     "build": "gulp",
     "watch": "gulp watch"
   },
-  "repository": "git+https://github.com/mountpoint/quasimodo.git",
-  "author": "Andrey Radzihovskiy <andreiradzihovs@gmail.com>",
+  "type": "module",
+  "author": "The Best Web Services <thebestwebservices@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mountpoint/quasimodo/issues"
-  },
-  "homepage": "https://github.com/mountpoint/quasimodo#readme",
   "devDependencies": {
-    "del": "^5.1.0",
-    "gulp": "^4.0.2",
-    "gulp-debug": "^4.0.0",
-    "require-dir": "^1.2.0"
-  },
-  "dependencies": {}
+    "del": "^8.0.0",
+    "gulp": "^5.0.0",
+    "gulp-debug": "^5.0.1"
+  }
 }

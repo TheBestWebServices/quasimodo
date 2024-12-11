@@ -1,72 +1,71 @@
-(function() {
-  var
-    startButton = El.$('#start'),
-    stopButton = El.$('#stop'),
-    timeLeft = El.$('#time-left'),
-    intervalMinutes = El.$('#show-interval-minutes'),
-    settings = El.$('#settings'),
+import { El, Ext } from './lib.js';
 
-    notifyEveryText = El.$('#notify-every-text'),
-    minutesText = El.$('#minutes-text')
-  ;
+const
+  startButton = El.$('#start'),
+  stopButton = El.$('#stop'),
+  timeLeft = El.$('#time-left'),
+  intervalMinutes = El.$('#show-interval-minutes'),
+  settings = El.$('#settings'),
+  notifyEveryText = El.$('#notify-every-text'),
+  minutesText = El.$('#minutes-text')
+;
 
-  chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
-    switch (response.signal) {
-      case 'time-left':
-        El.text(timeLeft, response.timeLeft.minutes + ':' + response.timeLeft.seconds);
-        break;
-      default:
-        alert('no handler');
-    }
-  });
+chrome.runtime.onMessage.addListener((response) => {
+  switch (response.signal) {
+    case 'time-left':
+      El.text(timeLeft, response.timeLeft.minutes + ':' + response.timeLeft.seconds);
+      break;
+    default:
+      alert('no handler');
+  }
+});
 
-  chrome.storage.local.get('quasimodo', function(storage) {
-    El.text(intervalMinutes, storage.quasimodo.intervalTime);
+chrome.storage.local.get('quasimodo', (storage) => {
+  El.text(intervalMinutes, storage.quasimodo.intervalTime);
 
-    if (storage.quasimodo.isStarted) {
-      El.hide(startButton);
-    } else {
-      El.hide(stopButton);
-    }
-  });
+  if (storage.quasimodo.isStarted) {
+    El.hide(startButton);
+  } else {
+    El.hide(stopButton);
+  }
+});
+
+/**
+ * Popup extension functionality
+ */
+const App = {
+  /**
+   * Start timer
+   */
+  start: function() {
+    El.show(stopButton);
+    El.hide(startButton);
+    Ext.sendMessage({ signal: 'start' });
+  },
 
   /**
-   * Popup extension functionality
+   * Stop timer
    */
-  var App = {
-    /**
-     * Start timer
-     */
-    start: function() {
-      El.show(stopButton);
-      El.hide(startButton);
-      Ext.sendMessage({signal: 'start'});
-    },
+  stop: function() {
+    El.show(startButton);
+    El.hide(stopButton);
+    Ext.sendMessage({ signal: 'stop' });
+  }
+};
 
-    /**
-     * Stop timer
-     */
-    stop: function() {
-      El.show(startButton);
-      El.hide(stopButton);
-      Ext.sendMessage({signal: 'stop'});
-    }
-  };
+startButton.addEventListener('click', () => {
+  App.start();
+}, false);
 
-  startButton.addEventListener('click', function() {
-    App.start();
-  }, false);
+stopButton.addEventListener('click', () => {
+  App.stop();
+}, false);
 
-  stopButton.addEventListener('click', function() {
-    App.stop();
-  }, false);
-
-  /**
-   * Populate translations
-   */
-  El.text(startButton, Ext.__('start_button_text'));
-  El.text(stopButton, Ext.__('stop_button_text'));
-  El.text(settings, Ext.__('settings_text'));
-  El.text(notifyEveryText, Ext.__('notify_every_text'));
-  El.text(minutesText, Ext.__('minutes_text'));
-})();
+/**
+ * Populate translations
+ */
+El.text(startButton, Ext.__('start_button_text'));
+El.text(stopButton, Ext.__('stop_button_text'));
+El.text(settings, Ext.__('settings_text'));
+El.text(notifyEveryText, Ext.__('notify_every_text'));
+El.text(minutesText, Ext.__('minutes_text'));

@@ -1,8 +1,6 @@
-'use strict';
+import { task }        from 'gulp';
+import { deleteAsync } from 'del';
 
-const
-  gulp = require('gulp'),
-  del = require('del')
-;
-
-gulp.task('clean', () => del(['public/**/*']));
+export default function() {
+  task('clean', () => deleteAsync(['public/**/*']));
+}

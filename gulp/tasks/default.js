@@ -1,5 +1,5 @@
-'use strict';
+import { task, series } from 'gulp';
 
-const gulp = require('gulp');
-
-gulp.task('default', gulp.series('clean', 'copy'));
+export default function() {
+  task('default', series('clean', 'copy'));
+}

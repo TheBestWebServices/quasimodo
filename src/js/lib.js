@@ -1,9 +1,7 @@
 /**
  * HTML Element manipulations
- *
- * @type {{$: El.$, $$: El.$$, show: El.show, hide: El.hide}}
  */
-var El = {
+export const El = {
   $: function(el) {
     return document.querySelector(el);
   },
@@ -37,7 +35,7 @@ var El = {
   text: function(el, text) {
     // array of objects
     if (el instanceof NodeList) {
-      for (var i = 0, len = el.length; i < len; ++i) {
+      for (let i = 0, len = el.length; i < len; ++i) {
         el[i].textContent = text;
       }
     }
@@ -62,7 +60,7 @@ var El = {
   html: function(el, html) {
     // array of objects
     if (el instanceof NodeList) {
-      for (var i = 0, len = el.length; i < len; ++i) {
+      for (let i = 0, len = el.length; i < len; ++i) {
         el[i].innerHTML = html;
       }
     }
@@ -81,10 +79,8 @@ var El = {
 
 /**
  * Extension methods
- *
- * @type {{sendMessage: Ext.sendMessage, setValue: Ext.setValue, __: Ext.__, play: Ext.play}}
  */
-var Ext = {
+export const Ext = {
   /**
    * Dispatches params to popup.js
    *
@@ -95,9 +91,7 @@ var Ext = {
       throw new Error('Message must be an object');
     }
 
-    chrome.runtime.sendMessage(message, function(response) {
-
-    });
+    chrome.runtime.sendMessage(message);
   },
 
   /**
@@ -111,18 +105,16 @@ var Ext = {
       throw new Error('Data must be an object');
     }
 
-    chrome.storage.local.get('quasimodo', function(storage) {
+    chrome.storage.local.get('quasimodo', (storage) => {
       if (typeof storage.quasimodo === 'undefined') {
         storage.quasimodo = {};
       }
 
-      for (var prop in data) {
+      for (const prop in data) {
         storage.quasimodo[prop] = data[prop];
       }
 
-      chrome.storage.local.set({
-        quasimodo: storage.quasimodo
-      }, function() {
+      chrome.storage.local.set({ quasimodo: storage.quasimodo }, () => {
         // Notify that we saved.
         if (message) {
           alert(message);
@@ -142,16 +134,19 @@ var Ext = {
   },
 
   /**
-   * Play the sound
+   * Create the offscreen document if it doesn't already exist
    *
-   * @param soundNumber
+   * @returns {Promise<void>}
    */
-  play: function(soundNumber) {
-    var soundExt = '.mp3';
-    if (/OPR/g.test(navigator.userAgent)) { // for Opera browser
-      soundExt = '.ogg';
+  createOffscreen: async function() {
+    if (await chrome.offscreen.hasDocument()) {
+      return;
     }
-    var audio = new Audio('sounds/' + soundNumber + soundExt);
-    audio.play();
-  }
+
+    await chrome.offscreen.createDocument({
+      url: 'offscreen.html',
+      reasons: ['AUDIO_PLAYBACK'],
+      justification: 'play notification sound',
+    });
+  },
 };
