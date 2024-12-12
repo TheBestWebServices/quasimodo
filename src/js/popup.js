@@ -15,8 +15,6 @@ chrome.runtime.onMessage.addListener((response) => {
     case 'time-left':
       El.text(timeLeft, response.timeLeft.minutes + ':' + response.timeLeft.seconds);
       break;
-    default:
-      alert('no handler');
   }
 });
 

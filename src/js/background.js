@@ -12,20 +12,18 @@ chrome.action.onClicked.addListener(() => {
 /**
  * Receiving signals
  */
-chrome.runtime.onMessage.addListener((response) => {
+chrome.runtime.onMessage.addListener(async (response) => {
   switch (response.signal) {
     case 'start':
-      Bg.start();
+      await Bg.start();
       break;
     case 'stop':
-      Bg.stop();
+      await Bg.stop();
       break;
     case 'update-interval':
-      Bg.stop();
-      Bg.start();
+      await Bg.stop();
+      await Bg.start();
       break;
-    default:
-      Bg.start();
   }
 });
 
@@ -66,15 +64,15 @@ const Bg = {
   /**
    * Start timer
    */
-  start: function() {
+  start: async function() {
     const self = this;
 
-    chrome.storage.local.get('quasimodo', function(storage) {
+    chrome.storage.local.get('quasimodo', async function(storage) {
       const time = self.timeLeft || self.toSeconds(storage.quasimodo.intervalTime);
 
       self.endTimestamp = self.getCurrentTimestamp() + time;
 
-      Ext.setValue({
+      await Ext.setValue({
         isStarted: true
       });
 
@@ -94,12 +92,12 @@ const Bg = {
   /**
    * Stop timer
    */
-  stop: function() {
+  stop: async function() {
     this.timeLeft = null;
     clearInterval(this.startInterval);
     clearInterval(this.timeWatcherInterval);
 
-    Ext.setValue({
+    await Ext.setValue({
       isStarted: false
     });
   },
@@ -140,11 +138,6 @@ const Bg = {
     self.timeWatcherInterval = setInterval((function(that) {
       return function() {
         const date = new Date();
-
-        /*console.log('watch');
-        console.log('curr '+ that.getFakeTimestamp(date.getHours(), date.getMinutes(), date.getSeconds()));
-        console.log('from '+ that.getFakeTimestamp(that.silence.fromHours, that.silence.fromMinutes, 0));
-        console.log('to '+ that.getFakeTimestamp(that.silence.toHours, that.silence.toMinutes, 0, true));*/
 
         if (
           !(that.getFakeTimestamp(date.getHours(), date.getMinutes(), date.getSeconds()) >= that.getFakeTimestamp(that.silence.fromHours, that.silence.fromMinutes, 0)
@@ -248,7 +241,7 @@ const Bg = {
    * @param toTimePoint
    * @returns {number}
    */
-  getFakeTimestamp: function(hours, minutes, seconds, toTimePoint) {
+  getFakeTimestamp: function(hours, minutes, seconds, toTimePoint = false) {
     let day = '01';
 
     if (toTimePoint && hours >= 0 && hours < this.silence.fromHours) {

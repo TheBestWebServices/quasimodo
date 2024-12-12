@@ -21,8 +21,8 @@ const
   toText = El.$('#to-text')
 ;
 
-saveButton.addEventListener('click', () => {
-  Ext.setValue({
+saveButton.addEventListener('click', async () => {
+  await Ext.setValue({
     soundNumber: +El.$$('input[name=sound]:checked')[0].value,
     soundEnabled: enableSoundCheckbox.checked,
     intervalTime: +intervalMinutesSlider.value,

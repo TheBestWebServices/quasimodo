@@ -100,27 +100,27 @@ export const Ext = {
    * @param data object
    * @param message string
    */
-  setValue: function(data, message) {
+  setValue: async function(data, message) {
     if (typeof data !== 'object') {
       throw new Error('Data must be an object');
     }
 
-    chrome.storage.local.get('quasimodo', (storage) => {
-      if (typeof storage.quasimodo === 'undefined') {
-        storage.quasimodo = {};
-      }
+    const storage = await chrome.storage.local.get('quasimodo');
 
-      for (const prop in data) {
-        storage.quasimodo[prop] = data[prop];
-      }
+    if (typeof storage.quasimodo === 'undefined') {
+      storage.quasimodo = {};
+    }
 
-      chrome.storage.local.set({ quasimodo: storage.quasimodo }, () => {
-        // Notify that we saved.
-        if (message) {
-          alert(message);
-        }
-      });
-    });
+    for (const prop in data) {
+      storage.quasimodo[prop] = data[prop];
+    }
+
+    await chrome.storage.local.set({ quasimodo: storage.quasimodo });
+
+    // Notify that we saved.
+    if (message) {
+      alert(message);
+    }
   },
 
   /**
