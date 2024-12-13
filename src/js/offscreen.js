@@ -1,7 +1,7 @@
 chrome.runtime.onMessage.addListener((response) => {
   switch (response.signal) {
     case 'play':
-      playAudio(response.soundNumber)
+      playAudio(response.soundNumber);
       break;
   }
 });
